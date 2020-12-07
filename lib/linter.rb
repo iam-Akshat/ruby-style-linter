@@ -35,7 +35,7 @@ class Linter
 
     arr = %w[do class def module else elsif]
     arr.each do |breaker|
-      reg = Regexp.new(/\b#{breaker}[^A-z0-9]/)
+      reg = Regexp.new(/\b#{breaker}\b/)
       line.match?(reg) and return true
     end
     false
@@ -70,7 +70,7 @@ class Linter
   end
 
   def indent_decrease?(line)
-    line.match?(/\bend[^A-z 0-9]/)
+    line.match?(/\bend\b/)
   end
 end
 
