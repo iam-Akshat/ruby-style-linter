@@ -35,13 +35,14 @@ class Linter
 
     arr = %w[do class def module else elsif]
     arr.each do |breaker|
-      line.include?(breaker) and return true
+      reg = Regexp.new(/\b#{breaker}[^A-z0-9]/)
+      line.match?(reg) and return true
     end
     false
   end
   def check_proper_indentation(line, level = 0)
     # puts line.lstrip
-    level -= 1 if indent_decrease?(line)
+    level -= 1 if indent_decrease?(line) && !comment?(line)
     return true if new_line?(line)
   
     striped_line_length = line.lstrip.length
@@ -69,10 +70,10 @@ class Linter
   end
 
   def indent_decrease?(line)
-    line.include?('end') 
+    line.match?(/\bend[^A-z 0-9]/)
   end
 end
 
-linter = Linter.new(Dir.getwd)
+linter = Linter.new(ARGV[0] ||Dir.getwd)
 
 linter.lint
