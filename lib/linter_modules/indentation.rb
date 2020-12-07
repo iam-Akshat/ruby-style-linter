@@ -23,13 +23,13 @@ module Indentation
     private
 
     def indentation_increase?(line)
-      indent_increasing_tokens = %w[do class def module else elsif if]
+      indent_increasing_tokens = %w[do class def module else elsif if unless]
       indent_increasing_tokens.each do |breaker|
         reg = Regexp.new(/\b#{breaker}\b/)
         next unless line.match?(reg)
 
-        if breaker == 'if'
-          guard_like_statement?(line) and return false
+        if %w[if unless].include?(breaker)
+          guard_like_statement?(line, breaker) and return false
           return true
         end
         return true
@@ -85,8 +85,8 @@ module Indentation
       false
     end
 
-    def guard_like_statement?(line)
-      part = line.strip.partition(/\bif\b/)
+    def guard_like_statement?(line, breaker)
+      part = line.strip.partition(/\b#{breaker}\b/)
       part[0] == '' and return false
       true
     end
