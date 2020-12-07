@@ -1,7 +1,6 @@
 require_relative 'linter_helper.rb'
 class Linter
   include LinterHelpers
-  
 
   def initialize(start_directory)
     @file_store = {}
@@ -9,48 +8,54 @@ class Linter
   end
 
   def lint
-    @file_store.each do |file_path,file_name|
-      read_file_by_line(file_path,file_name)
+    @file_store.each do |file_path, file_name|
+      check_indentation(file_path, file_name)
     end
   end
 
-  def read_file_by_line(file_path,file_name)
+  def check_indentation(file_path, file_name)
     line_number = 0
     nesting_level = 0
     IO.foreach(file_path) do |line|
       line_number += 1
-      
+
       line_without_strings = sanitize_line(line)
       # puts line
-      puts "#{file_name}:#{line_number}:bad indentation #{nesting_level}" unless check_proper_indentation(line_without_strings, nesting_level)
+      puts "#{file_name}:#{line_number}" unless proper_indentation?(line_without_strings, nesting_level)
       next if comment?(line)
-      nesting_level += 1 if code_indentation_increaser(line_without_strings)
+
+      nesting_level += 1 if indentation_increase?(line_without_strings)
 
       nesting_level -= 1 if indent_decrease?(line_without_strings)
     end
   end
 
-  def code_indentation_increaser(line)
-    #return true if line.lstrip[0,2] == 'if'
-
-    arr = %w[do class def module else elsif]
-    arr.each do |breaker|
+  def indentation_increase?(line)
+    indent_increasing_tokens = %w[do class def module else elsif if]
+    indent_increasing_tokens.each do |breaker|
       reg = Regexp.new(/\b#{breaker}\b/)
-      line.match?(reg) and return true
+      next unless line.match?(reg)
+
+      if breaker == 'if'
+        guard_like_statement?(line) and return false
+        return true
+      end
+      return true
     end
     false
   end
-  def check_proper_indentation(line, level = 0)
+
+  def proper_indentation?(line, level = 0)
     # puts line.lstrip
-    level -= 1 if indent_decrease?(line) && !comment?(line)
+    level -= 1 if (indent_decrease?(line) && !comment?(line)) || local_indent_decrease?(line)
     return true if new_line?(line)
-  
+
     striped_line_length = line.lstrip.length
     line.length - striped_line_length == level * 2 and return true
     false
   end
-  # Removes strings from line ||
-  # puts "as" and puts "sa" => puts and puts 
+  # Removes strings from line
+  # Example: "puts "as" and puts "sa"" => "puts and puts"
 
   def sanitize_line(line)
     strip_strings = Regexp.new(/['"\[](.*?)['"\]]/)
@@ -70,10 +75,27 @@ class Linter
   end
 
   def indent_decrease?(line)
-    line.match?(/\bend\b/)
+    decrease_symbols = %w[end else elsif]
+    decrease_symbols.each do |symbol|
+      reg = Regexp.new(/\b#{symbol}\b/)
+      line.match?(reg) and return true
+    end
+
+    false
+  end
+
+  def local_indent_decrease?(line)
+    local_decrease_symbols = %w[else elsif]
+    local_decrease_symbols.each do |symbol|
+      reg = Regexp.new(/\b#{symbol}\b/)
+      line.match?(reg) and return true
+    end
+    false
+  end
+
+  def guard_like_statement?(line)
+    part = line.strip.partition(/\bif\b/)
+    part[0] == '' and return false
+    true
   end
 end
-
-linter = Linter.new(ARGV[0] ||Dir.getwd)
-
-linter.lint
