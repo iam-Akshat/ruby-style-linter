@@ -10,8 +10,7 @@ class Linter
 
   def lint
     @file_store.each do |file_path, file_name|
-      check_indentation(file_path, file_name)
-      indentation_increase?('dsdsds')
+      Indentation.lint_indentation(file_path, file_name)
     end
   end
 end
