@@ -9,8 +9,8 @@ class Linter
   end
 
   def lint
-    @file_store.each do |file_path, file_name|
-      Indentation.lint_indentation(file_path, file_name)
+    @file_store.each do |file_path, _file_name|
+      Indentation.lint_indentation(file_path, file_path.gsub(Dir.getwd, ''))
     end
   end
 end

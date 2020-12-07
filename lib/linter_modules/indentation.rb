@@ -8,7 +8,10 @@ module Indentation
 
         line_without_strings = sanitize_line(line)
         # puts line
-        puts "#{file_name}:#{line_number}" unless proper_indentation?(line_without_strings, nesting_level)
+        unless proper_indentation?(line_without_strings, nesting_level)
+          err = "[Style/Indentation] #{file_name}:#{line_number} needs 2 spaces of indentation"
+          puts err
+        end
         next if comment?(line)
 
         nesting_level += 1 if indentation_increase?(line_without_strings)
