@@ -16,8 +16,8 @@ module LinterHelpers
   end
 end
 include LinterHelpers
-file_map = {}
-traverse_dir(Dir.getwd, file_map)
-file_map.each do |path, name|
-  puts "#{path}:#{name}"
-end
+# file_map = {}
+# traverse_dir(Dir.getwd, file_map)
+# file_map.each do |path, name|
+#   puts "#{path}:#{name}"
+# end
