@@ -40,6 +40,7 @@ module Indentation
 
     # returns true if indentation is proper
     # else false
+    # rubocop:disable  Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def proper_indentation?(line, level = 0)
       # puts line.lstrip
       level -= 1 if (indent_decrease?(line) && !comment?(line)) || local_indent_decrease?(line)
@@ -51,6 +52,7 @@ module Indentation
       len_dif > level * 2 and return false, "#{len_dif - level * 2} less"
       len_dif < level * 2 and return false, "#{level * 2 - len_dif} extra"
     end
+    # rubocop:enable  Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     # Removes strings from line
     # Example: "puts "as" and puts "sa"" => "puts and puts"
 
