@@ -18,12 +18,14 @@ To get a local copy up and running follow these simple example steps.
 - go to you terminal
 - `git clone https://github.com/iam-Akshat/ruby-style-linter.git`
 - `cd ruby-style-linter`
-- `./ruby-style dir_you_want_to_scan`
+- `./bin/ruby-style file_path_or_directory_path` or `ruby ./bin/ruby-style file_path_or_directory_path`
+- Example:`./bin/ruby-style ./dir_test_folder/test.rb`
 
 ### Prerequisites
  - ruby
 ### Usage
-- Type `./ruby-style dir_you_want_to_scan` to scan any directory 
+- Type `./bin/ruby-style file_path_or_directory_path` to scan any directory or file
+- Example:`./bin/ruby-style ./dir_test_folder/test.rb
 ### Run tests
 - rspec
 
@@ -35,6 +37,9 @@ To get a local copy up and running follow these simple example steps.
 - Twitter: [@akshatsethi](https://twitter.com/akshatsethi)
 - LinkedIn: [Akshat Sethi](https://www.linkedin.com/in/akshat-sethi-786737ba/)
 
+## Acknowledgements
+
+- Inspired from rubocop
 
 ## 🤝 Contributing
 To add new modules, add it in lib/linter_modules using same structure as indentation_module
