@@ -8,8 +8,9 @@ module Indentation
 
         line_without_strings = sanitize_line(line)
         # puts line
-        unless proper_indentation?(line_without_strings, nesting_level)
-          err = "[Style/Indentation] #{file_name}:#{line_number} needs 2 spaces of indentation"
+        indent_status = proper_indentation?(line_without_strings, nesting_level)
+        unless indent_status[0]
+          err = "[Style/Indentation] #{file_name}:#{line_number} needs #{indent_status[1]} spaces of indentation"
           puts err
         end
         next if comment?(line)
@@ -37,14 +38,18 @@ module Indentation
       false
     end
 
+    # returns true if indentation is proper
+    # else false
     def proper_indentation?(line, level = 0)
       # puts line.lstrip
       level -= 1 if (indent_decrease?(line) && !comment?(line)) || local_indent_decrease?(line)
       return true if new_line?(line)
 
       striped_line_length = line.lstrip.length
-      line.length - striped_line_length == level * 2 and return true
-      false
+      len_dif = line.length - striped_line_length
+      len_dif == level * 2 and return true, nil
+      len_dif > level * 2 and return false, "#{len_dif - level * 2} less"
+      len_dif < level * 2 and return false, "#{level * 2 - len_dif} extra"
     end
     # Removes strings from line
     # Example: "puts "as" and puts "sa"" => "puts and puts"
