@@ -6,9 +6,9 @@ describe 'LinterHelpers' do
       include LinterHelpers
       test_dir = "#{Dir.getwd}/spec/dir_test_folder/"
       file_store = {}
-      traverse_dir(test_dir, file_store)
+      LinterHelpers.traverse_dir(test_dir, file_store)
       expect(file_store).to include(
-        "#{test_dir}1.rb" => '1.rb',
+        "#{test_dir}test.rb" => 'test.rb',
         "#{test_dir}test_folder/2.rb" => '2.rb'
       )
     end

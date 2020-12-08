@@ -5,7 +5,7 @@ class Linter
   include Indentation
   def initialize(start_directory)
     @file_store = {}
-    traverse_dir(start_directory, @file_store)
+    LinterHelpers.traverse_dir(start_directory, @file_store)
   end
 
   def lint

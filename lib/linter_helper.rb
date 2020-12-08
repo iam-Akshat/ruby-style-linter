@@ -1,5 +1,5 @@
 module LinterHelpers
-  def traverse_dir(root, store, filter = 'rb')
+  def self.traverse_dir(root, store, filter = 'rb')
     Dir.foreach(root) do |x|
       path = File.join(root, x)
       next if (x == '.') || (x == '..')
