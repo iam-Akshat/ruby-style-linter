@@ -44,7 +44,7 @@ module Indentation
     def proper_indentation?(line, level = 0)
       # puts line.lstrip
       level -= 1 if (indent_decrease?(line) && !comment?(line)) || local_indent_decrease?(line)
-      return true if new_line?(line)
+      return true,nil if new_line?(line)
 
       striped_line_length = line.lstrip.length
       len_dif = line.length - striped_line_length
