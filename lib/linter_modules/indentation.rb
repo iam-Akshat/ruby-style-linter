@@ -23,6 +23,22 @@ module Indentation
 
     private
 
+    # returns true if indentation is proper
+    # else false
+    # rubocop:disable  Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def proper_indentation?(line, level = 0)
+      # puts line.lstrip
+      level -= 1 if (indent_decrease?(line) && !comment?(line)) || local_indent_decrease?(line)
+      return true, nil if new_line?(line)
+
+      striped_line_length = line.lstrip.length
+      len_dif = line.length - striped_line_length
+      len_dif == level * 2 and return true, nil
+      len_dif > level * 2 and return false, "#{len_dif - level * 2} less"
+      len_dif < level * 2 and return false, "#{level * 2 - len_dif} extra"
+    end
+
+    # rubocop:enable  Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def indentation_increase?(line)
       indent_increasing_tokens = %w[do class def module else elsif if unless]
       indent_increasing_tokens.each do |breaker|
@@ -38,21 +54,6 @@ module Indentation
       false
     end
 
-    # returns true if indentation is proper
-    # else false
-    # rubocop:disable  Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    def proper_indentation?(line, level = 0)
-      # puts line.lstrip
-      level -= 1 if (indent_decrease?(line) && !comment?(line)) || local_indent_decrease?(line)
-      return true,nil if new_line?(line)
-
-      striped_line_length = line.lstrip.length
-      len_dif = line.length - striped_line_length
-      len_dif == level * 2 and return true, nil
-      len_dif > level * 2 and return false, "#{len_dif - level * 2} less"
-      len_dif < level * 2 and return false, "#{level * 2 - len_dif} extra"
-    end
-    # rubocop:enable  Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     # Removes strings from line
     # Example: "puts "as" and puts "sa"" => "puts and puts"
 
