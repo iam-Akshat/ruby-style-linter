@@ -5,7 +5,11 @@ class Linter
   include Indentation
   def initialize(start_directory)
     @file_store = {}
-    LinterHelpers.traverse_dir(start_directory, @file_store)
+    if Dir.exist?(start_directory)
+      LinterHelpers.traverse_dir(start_directory, @file_store)
+    elsif start_directory.split('.')[-1] == 'rb'
+      @file_store[start_directory] = start_directory.split('/')[-1]
+    end
   end
 
   def lint
