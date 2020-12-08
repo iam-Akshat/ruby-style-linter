@@ -7,7 +7,6 @@ module Indentation
         line_number += 1
 
         line_without_strings = sanitize_line(line)
-        # puts line
         indent_status = proper_indentation?(line_without_strings, nesting_level)
         unless indent_status[0]
           err = "[Style/Indentation] #{file_name}:#{line_number} needs #{indent_status[1]} spaces of indentation"
@@ -23,11 +22,10 @@ module Indentation
 
     private
 
-    # returns true if indentation is proper
+    # proper_indentation?: returns true if indentation is proper
     # else false
     # rubocop:disable  Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def proper_indentation?(line, level = 0)
-      # puts line.lstrip
       level -= 1 if (indent_decrease?(line) && !comment?(line)) || local_indent_decrease?(line)
       return true, nil if new_line?(line)
 
