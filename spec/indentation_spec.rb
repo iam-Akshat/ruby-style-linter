@@ -1,4 +1,4 @@
-require_relative '../lib/linter_modules/indentation.rb'
+require_relative '../lib/linter_modules/indentation'
 
 describe 'linter_indentaion_module' do
   describe '.lint_indentation' do

@@ -1,5 +1,5 @@
-require_relative 'linter_helper.rb'
-require_relative './linter_modules/indentation.rb'
+require_relative 'linter_helper'
+require_relative './linter_modules/indentation'
 class Linter
   include LinterHelpers
   include Indentation

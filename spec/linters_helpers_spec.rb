@@ -1,4 +1,4 @@
-require_relative '../lib/linter_helper.rb'
+require_relative '../lib/linter_helper'
 
 describe 'LinterHelpers' do
   describe '#traverse_dir' do
